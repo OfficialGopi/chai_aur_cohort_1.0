@@ -1,9 +1,10 @@
-import express from "express"
+import express, { request } from "express"
 const app = express()
 import dotenv from "dotenv"
 import cors from 'cors'
 import db from "./utils/db.js"
-import registerUser from "./controller/user.controller.js"
+import cookieParser from "cookie-parser"
+import router from "./route/user.route.js"
 dotenv.config()
 
 const port = process.env.PORT || 6666
@@ -18,24 +19,19 @@ app.use(cors(
 ))
 //jab data url se ata hai to ye use hota hai 
 app.use(express.urlencoded({extended:true}))
-// app.get('/', (req, res) => {
-//   res.send('cohort!')
-// })
-app.get('/shivam', (req, res) => {
-  res.send('Hello shivam!')
-})
-app.get('/suraj', (req, res) => {
-  res.send('Hello suraj!')
-})
+app.use(express.json())
+app.use(cookieParser())
+// app.use(console.log("req cookies: ", request.cookies);
+
 // console.log(process.env);
 // console.log( typeof express());
 // console.log("app", app);
 
 //mongodb connect
 db()
-
+console.log(db())
 //route import
-app.use('/api/v1/users', registerUser)
+app.use('/api/v1/users', router)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
