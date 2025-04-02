@@ -20,17 +20,14 @@ app.use(cors(
 //jab data url se ata hai to ye use hota hai 
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
-app.use(cookieParser())
-// app.use(console.log("req cookies: ", request.cookies);
 
-// console.log(process.env);
-// console.log( typeof express());
-// console.log("app", app);
 
 //mongodb connect
 db()
-console.log(db())
+
+
 //route import
+app.use(cookieParser())
 app.use('/api/v1/users', router)
 
 app.listen(port, () => {

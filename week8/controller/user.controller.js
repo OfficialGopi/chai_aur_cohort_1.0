@@ -53,7 +53,7 @@ const registerUser = async (req, res) => {
  
      if(!user){
          return res.status(400).json({
-             message: "user not register"
+             message: "user not register",
          })
      }
  
@@ -89,7 +89,8 @@ const registerUser = async (req, res) => {
  
     res.status(201).json({
       message: "user register successfully",
-      success: true
+      success: true,
+      user
     })
  
    } catch (error) {
@@ -201,36 +202,52 @@ const loginUser = async (req, res) => {
     const cookiesOptions = {
         httpOnly: true,
         secure: true,
-        maxAge: 24 * 60 * 60 * 1000
+        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: "Lax"
     }
 
   
-    console.log("res cookies : ", res.cookies);   
-
-    res.cookie("verifyToken", jwtToken, cookiesOptions)
     
+    res.cookie("verifyToken", jwtToken, cookiesOptions)
+
  
     return res.status(200).json({
         message: "login successfully",
         success: true,
         token: jwtToken,
-        user: {
-            id: user._id,
-            name: user.username            
-        }
+        user
     })
 
    } catch (error) {
       console.log("error while fetching user : ", error);      
-   }
+     }
 
 
 
 
 }
 
-const profile = async(req, res) => {
+const getme = async(req, res) => {
+    console.log("get me tak aa gya");
     
+    res.status(200).json({
+        message: "profile fetched"
+    })
 }
-export {registerUser, verifyUser, loginUser, profile}
+
+
+const logoutUser = async(req, res) => {
+     console.log("req cookies logout: ", req.cookies);
+     res.cookie("verifyToken", "")
+
+     console.log("req cookies logout empty: ", req.cookies);
+     
+
+     res.status(200).json({
+        message: "logout successfully"
+        
+     })
+     
+}
+export {registerUser, verifyUser, loginUser, getme, logoutUser}
 
